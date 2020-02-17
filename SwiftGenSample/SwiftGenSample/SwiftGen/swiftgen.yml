@@ -1,0 +1,28 @@
+strings:
+  inputs: ../Resources
+  filter: .+\.strings$
+  outputs:
+    templateName: structured-swift4
+    output: Generated/Strings.swift
+json:
+  inputs: ../SupportingFiles/AppConfig/appconfig-private.json
+  outputs:
+    templatePath: Templates/appconfig-keys.stencil
+    output: Generated/AppConfig.swift
+    params:
+      enumName: AppConfig
+ib:
+  inputs: ../
+  outputs:
+    templateName: scenes-swift4
+    output: Generated/Storyboard.swift
+colors:
+  inputs: ../Resources/Color.txt
+  outputs:
+   templateName: swift4
+   output: Generated/Colors.swift
+xcassets:
+  inputs: ../Resources/Color.xcassets
+  outputs:
+     templateName: swift4
+     output: Generated/ColorAssets.swift

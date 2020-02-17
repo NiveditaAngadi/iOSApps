@@ -1,0 +1,111 @@
+// swiftlint:disable all
+// Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
+
+{% if files %}
+{% set accessModifier %}{% if param.publicAccess %}public{% else %}internal{% endif %}{% endset %}
+{% set documentPrefix %}{{param.documentName|default:"Document"}}{% endset %}
+import Foundation
+
+// swiftlint:disable superfluous_disable_command
+// swiftlint:disable file_length
+
+// MARK: - JSON Files
+{% macro docBlock file %}
+private static let _document: {{documentPrefix}} = objectFromJSON(at: "appconfig.json") //"{% call transformPath file.path %}"
+
+  {% for key,value in file.documents.first.metadata.properties %}
+    {% set propertyName %}{{key|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}{% endset %}
+static {% call propertyBlock key value %} = _document.{{propertyName}}
+  {% endfor %}
+  {% call structsBlock documentPrefix file.documents.first.metadata.properties %}
+{% endmacro %}
+
+{% macro structsBlock name properties %}
+  {% call structBlock name properties %}
+  {% for key,metadata in properties %}
+    {% if metadata.type == "Dictionary" %}
+      {% set propertyName %}{{documentPrefix}}{{key|swiftIdentifier:"pretty"|upperFirstLetter|escapeReservedKeywords}}{% endset %}
+      {% call structsBlock propertyName metadata.properties %}
+    {% endif %}
+  {% endfor %}  
+{% endmacro %}
+{% macro structBlock name properties %}
+struct {{name}}: Decodable {
+  {% for key,value in properties %}
+    {% call propertyBlock key value %}
+  {% endfor %}
+  enum CodingKeys: String, CodingKey {
+  {% for key,value in properties %}
+    {% set propertyName %}{{key|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}{% endset %}
+    case {{propertyName}} = "{{key}}"
+  {% endfor %}
+  }
+}
+{% endmacro %}
+{% macro documentBlock file document %}
+  {% set rootType %}{% call typeBlock document.metadata %}{% endset %}
+  {% if document.metadata.type == "Array" %}
+  {{accessModifier}} static let items: {{rootType}} = objectFromJSON(at: "{% call transformPath file.path %}")
+  {% elif document.metadata.type == "Dictionary" %}
+  private static let _document = JSONDocument(path: "{% call transformPath file.path %}")
+
+    {% for key,value in document.metadata.properties %}
+  {{accessModifier}} {% call propertyBlock key value %}
+    {% endfor %}
+  {% else %}
+  {{accessModifier}} static let value: {{rootType}} = objectFromJSON(at: "{% call transformPath file.path %}")
+  {% endif %}
+{% endmacro %}
+{% macro typeBlock metadata %}{% filter removeNewlines:"leading" %}
+  {% if metadata.type == "Array" %}
+    [{% call typeBlock metadata.element %}]
+  {% elif metadata.type == "Dictionary" %}
+    {{documentPrefix}}{{key|swiftIdentifier:"pretty"|upperFirstLetter|escapeReservedKeywords}}
+  {% elif metadata.type == "Optional" %}
+    Any?
+  {% else %}
+    {{metadata.type}}
+  {% endif %}
+{% endfilter %}{% endmacro %}
+{% macro propertyBlock key metadata %}{% filter removeNewlines:"leading" %}
+  {% set propertyName %}{{key|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}}{% endset %}
+  {% set propertyType %}{% call typeBlock metadata %}{% endset %}
+  let {{propertyName}}: {{propertyType}}
+{% endfilter %}{% endmacro %}
+{% macro transformPath path %}{% filter removeNewlines %}
+  {% if param.preservePath %}
+    {{path}}
+  {% else %}
+    {{path|basename}}
+  {% endif %}
+{% endfilter %}{% endmacro %}
+
+// swiftlint:disable identifier_name line_length type_body_length
+{{accessModifier}} enum {{param.enumName|default:"JSONFiles"}} {
+  {% if files.count > 1 %}
+    {% for file in files %}
+  {{accessModifier}} enum {{file.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
+  {% filter indent:2 %}{% call docBlock file %}{% endfilter %}
+    }
+    {% endfor %}
+  {% else %}
+    {% filter indent:2 %}{% call docBlock files.first %}{% endfilter %}
+  {% endif %}
+}
+// swiftlint:enable identifier_name line_length type_body_length
+
+// MARK: - Implementation Details
+
+private func objectFromJSON<T: Decodable>(at path: String) -> T {
+  let bundle = Bundle(for: BundleToken.self)
+  guard let url = bundle.url(forResource: path, withExtension: nil),
+    let result = try? JSONDecoder().decode(T.self, from: Data(contentsOf: url)) else {
+    fatalError("Unable to load JSON at path: \(path)")
+  }
+  return result
+}
+
+private final class BundleToken {}
+{% else %}
+// No files found
+{% endif %}

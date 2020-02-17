@@ -1,0 +1,59 @@
+/*
+  Localizable.strings
+  newcoupons
+*/
+
+/* Global Shared String */
+"NoInternetAndDataTitle" = "Internet Required";
+"NoInternetAndDataMessage" = "You must be connected to the Internet to access content.";
+"PrintersNoLocationErr" = "Printing great coupons requires an internet connection. Please check your connection and try again.";
+"NoDataMessage" = "We are having trouble fetching content at this moment.";
+"Refreshing" = "Refreshing...";
+
+/* Some standard strings we will need throughout the app */
+"OK" = "Chiness OK";
+"No" = "Chiness No";
+"Yes" = "Chiness Yes";
+"All" = "All";
+"Cancel" = "Cancel";
+"Back" = "Back";
+"Next" = "Next";
+"Done" = "Done";
+"Edit" = "Edit";
+"Error" = "Error";
+"Delete" = "Delete";
+"Email" = "Email";
+"Print" = "Print";
+"Login" = "Login";
+"Register" = "Register";
+"SignIn" = "Sign in";
+"SignUp" = "Sign up";
+"Loading" = "Loading...";
+"Searching" = "Searching...";
+"Adding" = "Adding...";
+"Deleting" = "Deleting...";
+"Share" = "Share";
+"TryAgain" = "Try Again";
+"Wait" = "Wait";
+"Close" = "Close";
+"Save" = "Save";
+"ExpirationDate" = "Use By";
+"Redeemed" = "Redeemed";
+"Retry" = "Retry";
+"Apply" = "Apply";
+"TopDeals" = "Top Deals";
+"Miles" = "mi";
+"UseBy" = "Use By";
+"TryAgain" = "Try Again";
+"Help" = "Help";
+"Continue" = "Continue";
+"CouponsCom" = "Coupons.com";
+"MyCoupons" = "My Coupons";
+"Detail" = "Detail";
+"Skip" = "Skip";
+"Help" = "Help";
+"FAQ" = "FAQ";
+"Replace" = "Replace";
+"Password" = "Password";
+"SearchAgain" = "Search Again";
+"Refresh" = "Refresh";

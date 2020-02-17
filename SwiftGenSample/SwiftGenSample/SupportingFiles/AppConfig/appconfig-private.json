@@ -1,0 +1,13 @@
+{
+    "network": {
+        "logging_enabled" : false,
+        "logging_pretty_print" : true,
+        "logging_log_requests_in_curl_format" : false,
+        "logging_default_logger" : "LMLoaderLogger",
+
+        "base": {
+            "url" : "https://google.com"
+        }
+    }
+}
+

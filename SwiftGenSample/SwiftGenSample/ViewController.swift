@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.displayLabel.text = NSLocalizedString("OK", comment: "Ok")
         self.displayLabel.textColor = Asset.name.color
+        
         // Do any additional setup after loading the view.
     }
 
